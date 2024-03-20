@@ -1,502 +1,326 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="index.css" />
     <title>Catbase</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f0f0f0;
-        }
-        .container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: #ffffff;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            position: relative; /* Added position relative */
-        }
-        h1 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 20px; /* Added margin bottom */
-        }
-        .upload-btn {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            position: absolute; /* Position absolute to position it relative to the container */
-            top: 20px; /* Adjust as needed */
-            right: 20px; /* Adjust as needed */
-        }
-        .media-container {
-            width: calc(100% - 40px);
-            margin: 0 auto;
-            color: #333;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            min-height: 400px; /* Set a minimum height for the media container */
-            align-items: center;
-        }
-        .media-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            width: 100%;
-        }
-        .media-item {
-            width: calc(33.33% - 20px);
-            margin-bottom: 20px;
-            box-sizing: border-box;
-            border: 1px solid #9f9f9f;
-            background-color: #c9c9c9;
-            border-radius: 5px;
-            overflow: hidden;
-            position: relative;
-            height: 100%;
-            display: none;
-        }
-        .media-item.show {
-            display: block;
-        }
-        .media-item img, .media-item video {
-            width: 100%;
-            height: 400px;
-            display: block;
-            object-fit: cover;
-        }
-        .media-item .name {
-            padding: 10px;
-            text-align: center;
-            font-weight: bold;
-        }
-        .filter-container {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .filter-wrapper {
-            display: inline-block;
-            margin-bottom: 10px;
-        }
-        .filter-wrapper label {
-            display: block;
-            margin-bottom: 5px;
-            text-align: center;
-        }
-        .filter-wrapper select {
-            width: 200px;
-            padding: 8px 16px;
-            font-size: 16px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            background-color: #fff;
-            appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            text-align: center;
-        }
-        .overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            justify-content: center;
-            align-items: center; 
-            z-index: 9999; 
-        }
-        .close-btn {
-            position: absolute;
-            top: 5px;
-            right: 10px;
-            cursor: pointer;
-            font-size: 24px;
-        }
-        footer {
-            background-color: #333;
-            color: #fff;
-            padding: 20px;
-            text-align: center;
-        }
-        .footer-content {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        .social-links {
-            list-style-type: none;
-            padding: 0;
-        }
-        .social-links li {
-            display: inline;
-            margin-right: 10px;
-        }
-        .social-links li a {
-            color: #fff;
-            text-decoration: none;
-        }
-        .social-links li a:hover {
-            text-decoration: underline;
-        }
-        input[type="file"] {
-            width: calc(100% - 20px);
-            margin: 10px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        input[type="text"] {
-            width: calc(100% - 20px);
-            margin: 10px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        .finalize-upload-btn {
-            background-color: #ff0000;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 10px; /* Add margin to separate from the input fields */
-            width: 100%; /* Make button full width */
-        }
-        .finalize-upload-btn:disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
-        }
-
-        .finalize-upload-btn:disabled:hover {
-            background-color: #ccc;
-        }
-
-        .file-category-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center; /* Center align the contents */
-        }
-
-        .file-category-item {
-            background-color: #f0f0f0;
-            color: #333;
-            padding: 5px 10px;
-        }
-
-        .file-category-container input[type="text"],
-        .file-category-container button {
-            margin: 5px; /* Adjust margin for proper spacing */
-        }
-
-        #fileName,
-        #fileInput,
-        #fileCategory {
-            width: calc(100% - 20px);
-            margin: 10px auto; /* Change margin to auto */
-            margin-bottom: 10px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            display: block; /* Make them block-level elements */
-        }
-
-        .popup {
-            background-color: #fff;
-            border-radius: 5px;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-            max-width: 400px;
-            width: 100%;
-            text-align: center;
-            position: relative;
-        }
-            </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
+      <header>
         <h1>The Catbase 🐱</h1>
-        <button type="button" class="upload-btn" onclick="showUploadPopup()">Upload Cat</button>
+        <button type="button" class="upload-btn" onclick="showUploadPopup()">
+          Upload Cat
+        </button>
         <div class="filter-container">
-            <div class="filter-wrapper">
-                <label for="categorySelect">Category:</label>
-                <div class="category-filter">
-                    <select id="categorySelect" onchange="filterMedia()">
-                        <option value="all">All</option>
-                    </select>
-                </div>
+          <div class="filter-wrapper">
+            <label for="categorySelect">Category:</label>
+            <div class="category-filter">
+              <select id="categorySelect" onchange="filterMedia()">
+                <option value="all">All</option>
+              </select>
             </div>
-            <div class="filter-wrapper">
-                <label for="typeSelect">Type:</label>
-                <div class="type-filter">
-                    <select id="typeSelect" onchange="filterMedia()">
-                        <option value="all">All Types</option>
-                        <option value="image">Image</option>
-                        <option value="video">Video</option>
-                    </select>
-                </div>
+          </div>
+          <div class="filter-wrapper">
+            <label for="typeSelect">Type:</label>
+            <div class="type-filter">
+              <select id="typeSelect" onchange="filterMedia()">
+                <option value="all">All Types</option>
+                <option value="image">Image</option>
+                <option value="video">Video</option>
+              </select>
             </div>
+          </div>
         </div>
-        <input type="text" id="searchInput" oninput="searchMedia()" placeholder="Search by name">
-        <div class="media-container" id="mediaContainer"></div>
+        <input
+          type="text"
+          id="searchInput"
+          oninput="searchMedia()"
+          placeholder="Search by name"
+        />
+      </header>
+      <div class="media-container" id="mediaContainer"></div>
     </div>
 
     <div class="overlay" id="uploadOverlay">
-        <div class="popup">
-            <span class="close-btn" onclick="hideUploadPopup()">&times;</span>
-            <h2>Upload Cat</h2>
-            <input type="file" id="fileInput" accept="image/*, video/*" multiple>
-            <input type="text" id="fileName" placeholder="Name" style="margin-top: 10px;">
-            <div class="file-category-container" style="margin-top: 10px;">
-                <input type="text" id="fileCategory" placeholder="Categories (up to 3, separate with commas)" style="width: calc(100% - 20px);">
-                <button class="finalize-upload-btn" onclick="uploadFile()">Disabled</button>
-            </div>
+      <div class="popup">
+        <span class="close-btn" onclick="hideUploadPopup()">&times;</span>
+        <h2>Upload Cat</h2>
+        <input type="file" id="fileInput" accept="image/*, video/*" multiple />
+        <input
+          type="text"
+          id="fileName"
+          placeholder="Name"
+          style="margin-top: 10px"
+        />
+        <div class="file-category-container" style="margin-top: 10px">
+          <input
+            type="text"
+            id="fileCategory"
+            placeholder="Categories (up to 3, separate with commas)"
+            style="width: calc(100% - 20px)"
+          />
+          <button class="finalize-upload-btn" onclick="uploadFile()">
+            Disabled
+          </button>
         </div>
+      </div>
     </div>
 
-
     <footer>
-        <div class="footer-content">
-            <p>Made with ❤️ by sieadev</p>
-            <p>Find me on:</p>
-            <ul class="social-links">
-                <li><a href="https://github.com/sieadev">GitHub</a></li>
-                <li><a href="https://discord.siea.dev">Discord</a></li>
-            </ul>
-        </div>
+      <div class="footer-content">
+        <p>Made with ❤️ by sieadev</p>
+        <p>Find me on:</p>
+        <ul class="social-links">
+          <li><a href="https://github.com/sieadev">GitHub</a></li>
+          <li><a href="https://discord.siea.dev">Discord</a></li>
+        </ul>
+      </div>
     </footer>
     <script>
-        function validateAndUpload() {
-            const fileInput = document.getElementById('fileInput');
-            const fileName = document.getElementById('fileName').value;
-            const fileCategories = document.getElementById('fileCategories').value.split(',').map(cat => cat.trim());
-            
-            if (!fileName.trim()) {
-                //alert('Please enter a name for the file.');
-                return;
-            }
+      function validateAndUpload() {
+        const fileInput = document.getElementById("fileInput");
+        const fileName = document.getElementById("fileName").value;
+        const fileCategories = document
+          .getElementById("fileCategories")
+          .value.split(",")
+          .map((cat) => cat.trim());
 
-            if (!fileCategories.length) {
-                //alert('Please enter at least one category for the file.');
-                return;
-            }
+        if (!fileName.trim()) {
+          //alert('Please enter a name for the file.');
+          return;
+        }
 
-            if (fileCategories.length > 3) {
-                //alert('Please enter up to 3 categories.');
-                return;
-            }
+        if (!fileCategories.length) {
+          //alert('Please enter at least one category for the file.');
+          return;
+        }
 
-            const files = fileInput.files;
-            if (!files.length) {
-                //alert('Please select a file to upload.');
-                return;
-            }
+        if (fileCategories.length > 3) {
+          //alert('Please enter up to 3 categories.');
+          return;
+        }
 
-            // Proceed with file upload
-            Array.from(files).forEach(file => {
-                console.log('File:', file);
-                console.log('Name:', fileName);
-                console.log('Categories:', fileCategories);
-                // Do this later
+        const files = fileInput.files;
+        if (!files.length) {
+          //alert('Please select a file to upload.');
+          return;
+        }
+
+        // Proceed with file upload
+        Array.from(files).forEach((file) => {
+          console.log("File:", file);
+          console.log("Name:", fileName);
+          console.log("Categories:", fileCategories);
+          // Do this later
+        });
+
+        hideUploadPopup();
+      }
+
+      function uploadFile() {
+        const fileInput = document.getElementById("fileInput");
+        const fileName = document.getElementById("fileName").value;
+        const fileCategories = document
+          .getElementById("fileCategory")
+          .value.split(",")
+          .map((cat) => cat.trim());
+        return;
+        if (!fileName.trim()) {
+          alert("Please enter a name for the file.");
+          return;
+        }
+
+        if (!fileCategories.length) {
+          alert("Please enter at least one category for the file.");
+          return;
+        }
+
+        if (fileCategories.length > 3) {
+          alert("Please enter up to 3 categories.");
+          return;
+        }
+
+        const files = fileInput.files;
+        if (!files.length) {
+          alert("Please select a file to upload.");
+          return;
+        }
+
+        // Proceed with file upload
+        Array.from(files).forEach((file) => {
+          console.log("File:", file);
+          console.log("Name:", fileName);
+          console.log("Categories:", fileCategories);
+          // Do this later
+        });
+
+        hideUploadPopup();
+      }
+
+      function appendCategory() {
+        const fileCategory = document.getElementById("fileCategory");
+        const categoryValue = fileCategory.value.trim();
+
+        if (!categoryValue) return;
+
+        const categoryContainer = document.querySelector(
+          ".file-category-container"
+        );
+        const categoryItem = document.createElement("div");
+        categoryItem.className = "file-category-item";
+        categoryItem.textContent = categoryValue;
+
+        categoryContainer.insertBefore(categoryItem, fileCategory);
+
+        fileCategory.value = "";
+      }
+
+      async function fetchAndDisplayMedia() {
+        try {
+          const response = await fetch("directory.json");
+          const mediaList = await response.json();
+          const mediaContainer = document.getElementById("mediaContainer");
+          const categorySelect = document.getElementById("categorySelect");
+          const categoryInput = document.getElementById("fileCategory");
+
+          const categories = new Set();
+          mediaList.forEach((media) => {
+            const mediaItem = document.createElement("div");
+            mediaItem.className = "media-item";
+            media.category.forEach((category) => {
+              // Change 'categories' to 'category'
+              mediaItem.classList.add(category);
+              categories.add(category);
             });
 
-            hideUploadPopup();
-        }
-
-        function uploadFile() {
-            const fileInput = document.getElementById('fileInput');
-            const fileName = document.getElementById('fileName').value;
-            const fileCategories = document.getElementById('fileCategory').value.split(',').map(cat => cat.trim());
-            return;
-            if (!fileName.trim()) {
-                alert('Please enter a name for the file.');
-                return;
-            }
-
-            if (!fileCategories.length) {
-                alert('Please enter at least one category for the file.');
-                return;
-            }
-
-            if (fileCategories.length > 3) {
-                alert('Please enter up to 3 categories.');
-                return;
-            }
-
-            const files = fileInput.files;
-            if (!files.length) {
-                alert('Please select a file to upload.');
-                return;
-            }
-
-            // Proceed with file upload
-            Array.from(files).forEach(file => {
-                console.log('File:', file);
-                console.log('Name:', fileName);
-                console.log('Categories:', fileCategories);
-                // Do this later
-            });
-
-            hideUploadPopup();
-        }
-
-        function appendCategory() {
-            const fileCategory = document.getElementById('fileCategory');
-            const categoryValue = fileCategory.value.trim();
-
-            if (!categoryValue) return;
-
-            const categoryContainer = document.querySelector('.file-category-container');
-            const categoryItem = document.createElement('div');
-            categoryItem.className = 'file-category-item';
-            categoryItem.textContent = categoryValue;
-
-            categoryContainer.insertBefore(categoryItem, fileCategory);
-
-            fileCategory.value = '';
-        }
-
-
-        async function fetchAndDisplayMedia() {
-            try {
-                const response = await fetch('directory.json');
-                const mediaList = await response.json();
-                const mediaContainer = document.getElementById('mediaContainer');
-                const categorySelect = document.getElementById('categorySelect');
-                const categoryInput = document.getElementById('fileCategory');
-
-                const categories = new Set();
-                mediaList.forEach(media => {
-                    const mediaItem = document.createElement('div');
-                    mediaItem.className = 'media-item';
-                    media.category.forEach(category => { // Change 'categories' to 'category'
-                        mediaItem.classList.add(category);
-                        categories.add(category);
-                    });
-
-                    if (isVideo(media.path)) {
-                        const videoPlayer = document.createElement('video');
-                        videoPlayer.controls = true;
-                        videoPlayer.className = 'media-player';
-                        const source = document.createElement('source');
-                        source.src = media.path;
-                        source.type = 'video/mp4'; // Adjust this if you have other file types
-                        videoPlayer.appendChild(source);
-                        mediaItem.appendChild(videoPlayer);
-                    } else if (isImage(media.path)) {
-                        const image = document.createElement('img');
-                        image.src = media.path;
-                        image.alt = media.name;
-                        mediaItem.appendChild(image);
-                    } else {
-                        console.error('Unsupported media type:', media.path);
-                        return; // Skip unsupported media types
-                    }
-
-                    const name = document.createElement('div');
-                    name.className = 'name';
-                    name.textContent = media.name;
-
-                    mediaItem.appendChild(name);
-                    mediaContainer.appendChild(mediaItem);
-                });
-
-                categories.forEach(category => {
-                    const option = document.createElement('option');
-                    option.value = category;
-                    option.textContent = category;
-                    categorySelect.appendChild(option);
-
-                    const categoryOption = document.createElement('option');
-                    categoryOption.value = category;
-                    categoryOption.textContent = category;
-                    categoryInput.appendChild(categoryOption);
-                });
-
-                filterMedia(); // Call filterMedia function to display all items initially
-                
-            } catch (error) {
-                console.error('Error fetching media:', error);
-            }
-        }
-
-        function filterMedia() {
-            const selectedCategories = Array.from(document.getElementById('categorySelect').selectedOptions).map(option => option.value);
-            const selectedType = document.getElementById('typeSelect').value; // Get the selected type
-            const mediaItems = document.querySelectorAll('.media-item');
-            
-            mediaItems.forEach(item => {
-                const itemCategories = Array.from(item.classList);
-                const itemType = isVideo(item.querySelector('img, video')) ? 'video' : 'image'; // Determine the type of each media item
-                if ((selectedCategories.includes('all') || selectedCategories.some(category => itemCategories.includes(category))) && 
-                    (selectedType === 'all' || itemType === selectedType)) {
-                    item.classList.add('show'); // Show items in selected categories and type
-                } else {
-                    item.classList.remove('show'); // Hide items not matching selected categories or type
-                }
-            });
-
-            const catNotFoundImage = document.getElementById('catNotFoundImage');
-            catNotFoundImage.style.display = noItemsFound ? 'block' : 'none';
-        }
-
-        function searchMedia() {
-            const searchQuery = document.getElementById('searchInput').value.toLowerCase();
-            const mediaItems = document.querySelectorAll('.media-item');
-            mediaItems.forEach(item => {
-                const itemName = item.querySelector('.name').textContent.toLowerCase();
-                if (itemName.includes(searchQuery)) {
-                    item.classList.add('show'); // Show items matching the search query
-                } else {
-                    item.classList.remove('show'); // Hide items not matching the search query
-                }
-            });
-        }
-
-        function isVideo(path) {
-            const videoExtensions = ['.mp4', '.webm', '.ogg', '.mov'];
-            if (typeof path !== 'string') {
-                const pathString = getSourceFromMediaElement(path);
-                return videoExtensions.some(ext => pathString.endsWith(ext));
-            }
-            return videoExtensions.some(ext => path.endsWith(ext));
-        }
-
-        function getSourceFromMediaElement(mediaElement) {
-            if (mediaElement.tagName.toLowerCase() === 'img') {
-                return mediaElement.getAttribute('src');
-            } else if (mediaElement.tagName.toLowerCase() === 'video') {
-                const sourceElement = mediaElement.querySelector('source');
-                return sourceElement ? sourceElement.getAttribute('src') : null;
+            if (isVideo(media.path)) {
+              const videoPlayer = document.createElement("video");
+              videoPlayer.controls = true;
+              videoPlayer.className = "media-player";
+              const source = document.createElement("source");
+              source.src = media.path;
+              source.type = "video/mp4"; // Adjust this if you have other file types
+              videoPlayer.appendChild(source);
+              mediaItem.appendChild(videoPlayer);
+            } else if (isImage(media.path)) {
+              const image = document.createElement("img");
+              image.src = media.path;
+              image.alt = media.name;
+              mediaItem.appendChild(image);
             } else {
-                console.error('Unsupported media element:', mediaElement);
-                return null;
+              console.error("Unsupported media type:", media.path);
+              return; // Skip unsupported media types
             }
-        }
 
-        function isImage(path) {
-            const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif'];
-            return imageExtensions.some(ext => path.endsWith(ext));
-        }
+            const name = document.createElement("div");
+            name.className = "name";
+            name.textContent = media.name;
 
-        function showUploadPopup() {
-            document.getElementById('uploadOverlay').style.display = 'flex'; // Change display to flex
-        }
+            mediaItem.appendChild(name);
+            mediaContainer.appendChild(mediaItem);
+          });
 
-        function hideUploadPopup() {
-            document.getElementById('uploadOverlay').style.display = 'none'; // Change display to none
-        }
+          categories.forEach((category) => {
+            const option = document.createElement("option");
+            option.value = category;
+            option.textContent = category;
+            categorySelect.appendChild(option);
 
-        fetchAndDisplayMedia();
+            const categoryOption = document.createElement("option");
+            categoryOption.value = category;
+            categoryOption.textContent = category;
+            categoryInput.appendChild(categoryOption);
+          });
+
+          filterMedia(); // Call filterMedia function to display all items initially
+        } catch (error) {
+          console.error("Error fetching media:", error);
+        }
+      }
+
+      function filterMedia() {
+        const selectedCategories = Array.from(
+          document.getElementById("categorySelect").selectedOptions
+        ).map((option) => option.value);
+        const selectedType = document.getElementById("typeSelect").value; // Get the selected type
+        const mediaItems = document.querySelectorAll(".media-item");
+
+        mediaItems.forEach((item) => {
+          const itemCategories = Array.from(item.classList);
+          const itemType = isVideo(item.querySelector("img, video"))
+            ? "video"
+            : "image"; // Determine the type of each media item
+          if (
+            (selectedCategories.includes("all") ||
+              selectedCategories.some((category) =>
+                itemCategories.includes(category)
+              )) &&
+            (selectedType === "all" || itemType === selectedType)
+          ) {
+            item.classList.add("show"); // Show items in selected categories and type
+          } else {
+            item.classList.remove("show"); // Hide items not matching selected categories or type
+          }
+        });
+
+        const catNotFoundImage = document.getElementById("catNotFoundImage");
+        catNotFoundImage.style.display = noItemsFound ? "block" : "none";
+      }
+
+      function searchMedia() {
+        const searchQuery = document
+          .getElementById("searchInput")
+          .value.toLowerCase();
+        const mediaItems = document.querySelectorAll(".media-item");
+        mediaItems.forEach((item) => {
+          const itemName = item
+            .querySelector(".name")
+            .textContent.toLowerCase();
+          if (itemName.includes(searchQuery)) {
+            item.classList.add("show"); // Show items matching the search query
+          } else {
+            item.classList.remove("show"); // Hide items not matching the search query
+          }
+        });
+      }
+
+      function isVideo(path) {
+        const videoExtensions = [".mp4", ".webm", ".ogg", ".mov"];
+        if (typeof path !== "string") {
+          const pathString = getSourceFromMediaElement(path);
+          return videoExtensions.some((ext) => pathString.endsWith(ext));
+        }
+        return videoExtensions.some((ext) => path.endsWith(ext));
+      }
+
+      function getSourceFromMediaElement(mediaElement) {
+        if (mediaElement.tagName.toLowerCase() === "img") {
+          return mediaElement.getAttribute("src");
+        } else if (mediaElement.tagName.toLowerCase() === "video") {
+          const sourceElement = mediaElement.querySelector("source");
+          return sourceElement ? sourceElement.getAttribute("src") : null;
+        } else {
+          console.error("Unsupported media element:", mediaElement);
+          return null;
+        }
+      }
+
+      function isImage(path) {
+        const imageExtensions = [".jpg", ".jpeg", ".png", ".gif"];
+        return imageExtensions.some((ext) => path.endsWith(ext));
+      }
+
+      function showUploadPopup() {
+        document.getElementById("uploadOverlay").style.display = "flex"; // Change display to flex
+      }
+
+      function hideUploadPopup() {
+        document.getElementById("uploadOverlay").style.display = "none"; // Change display to none
+      }
+
+      fetchAndDisplayMedia();
     </script>
-</body>
+  </body>
 </html>

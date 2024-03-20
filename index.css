@@ -1,0 +1,238 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f0f0f0;
+}
+.container {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  position: relative; /* Added position relative */
+}
+h1 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px; /* Added margin bottom */
+}
+.upload-btn {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  position: absolute; /* Position absolute to position it relative to the container */
+  top: 20px; /* Adjust as needed */
+  right: 20px; /* Adjust as needed */
+}
+.media-container {
+  width: calc(100% - 40px);
+  margin: 0 auto;
+  color: #333;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.media-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+.media-item {
+  width: calc(33.33% - 20px);
+  margin-bottom: 20px;
+  box-sizing: border-box;
+  border: 1px solid #9f9f9f;
+  background-color: #c9c9c9;
+  border-radius: 5px;
+  overflow: hidden;
+  position: relative;
+  max-height: 500px;
+  display: none;
+}
+.media-item.show {
+  display: flex;
+  flex-direction: column;
+  aspect-ratio: 1 / 2;
+}
+.media-item img,
+.media-item video {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  overflow: hidden;
+}
+.media-item .name {
+  padding-block: 0.75rem;
+  text-align: center;
+  font-weight: bold;
+}
+.filter-container {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.filter-wrapper {
+  display: inline-block;
+  margin-bottom: 10px;
+}
+.filter-wrapper label {
+  display: block;
+  margin-bottom: 5px;
+  text-align: center;
+}
+.filter-wrapper select {
+  width: 200px;
+  padding: 8px 16px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  text-align: center;
+}
+.overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+.close-btn {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  cursor: pointer;
+  font-size: 24px;
+}
+footer {
+  background-color: #333;
+  color: #fff;
+  padding: 20px;
+  text-align: center;
+}
+.footer-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+.social-links {
+  list-style-type: none;
+  padding: 0;
+}
+.social-links li {
+  display: inline;
+  margin-right: 10px;
+}
+.social-links li a {
+  color: #fff;
+  text-decoration: none;
+}
+.social-links li a:hover {
+  text-decoration: underline;
+}
+input[type="file"] {
+  width: calc(100% - 20px);
+  margin: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+input[type="text"] {
+  width: calc(100% - 20px);
+  margin: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.finalize-upload-btn {
+  background-color: #ff0000;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px; /* Add margin to separate from the input fields */
+  width: 100%; /* Make button full width */
+}
+.finalize-upload-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.finalize-upload-btn:disabled:hover {
+  background-color: #ccc;
+}
+
+.file-category-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* Center align the contents */
+}
+
+.file-category-item {
+  background-color: #f0f0f0;
+  color: #333;
+  padding: 5px 10px;
+}
+
+.file-category-container input[type="text"],
+.file-category-container button {
+  margin: 5px; /* Adjust margin for proper spacing */
+}
+
+#fileName,
+#fileInput,
+#fileCategory {
+  width: calc(100% - 20px);
+  margin: 10px auto; /* Change margin to auto */
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  display: block; /* Make them block-level elements */
+}
+
+.popup {
+  background-color: #fff;
+  border-radius: 5px;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  position: relative;
+}
+
+@media only screen and (max-width: 768px) {
+  .media-item {
+    width: calc(50% - 10px);
+  }
+  .media-item .name {
+    padding-block: 0.5rem;
+
+    font-size: 0.9rem;
+  }
+}
+
+@media only screen and (max-width: 576px) {
+  header {
+    margin-top: 3rem;
+  }
+
+  .media-item {
+    width: calc(100% - 5px);
+  }
+}
