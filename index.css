@@ -3,6 +3,7 @@ body {
   margin: 0;
   padding: 0;
   background-color: #f0f0f0;
+  color: #121212;
 }
 .container {
   max-width: 800px;
@@ -13,11 +14,50 @@ body {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   position: relative; /* Added position relative */
 }
+
+.dark-mode {
+  background-color: #292929;
+  color: #ffffff;
+}
+
+.dark-mode .container{
+  background-color: #121212;
+}
+
+.top-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #72a2ff;
+  color: #ffffff;
+  padding: 10px 20px;
+}
+
+.dark-mode .top-header {
+  background-color: #7209b7;
+  color: #ffffff;
+}
+
+.header-left {
+  display: flex;
+}
+
+.header-left a {
+  color: #ffffff;
+  text-decoration: none;
+  margin-right: 20px;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+}
+
 h1 {
   text-align: center;
-  color: #333;
   margin-bottom: 20px; /* Added margin bottom */
 }
+
 .upload-btn {
   background-color: #4caf50;
   color: white;
@@ -29,20 +69,88 @@ h1 {
   top: 20px; /* Adjust as needed */
   right: 20px; /* Adjust as needed */
 }
+
+.dark-mode .upload-btn {
+  background-color: #2d00f7;
+  color: white;
+}
+
+/* The switch (checkbox input) */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+/* Hide the default checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider (rounded rectangle) */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+  border-radius: 34px;
+}
+
+/* Rounded rectangle knob */
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+/* Toggle switch when checked */
+input:checked + .slider {
+  background-color: #292929;
+}
+
+/* Move the knob to the right when checked */
+input:checked + .slider:before {
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
 .media-container {
   width: calc(100% - 40px);
   margin: 0 auto;
-  color: #333;
+  color: #151515;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
 }
+
 .media-list {
   list-style: none;
   padding: 0;
   margin: 0;
   width: 100%;
 }
+
 .media-item {
   width: calc(33.33% - 20px);
   margin-bottom: 20px;
@@ -55,11 +163,19 @@ h1 {
   max-height: 500px;
   display: none;
 }
+
+.dark-mode .media-item{
+  border: 1px solid #1e1e1e;
+  background-color: #1e1e1e;
+  color: #c9c9c9;
+}
+
 .media-item.show {
   display: flex;
   flex-direction: column;
   aspect-ratio: 1 / 2;
 }
+
 .media-item img,
 .media-item video {
   width: 100%;
